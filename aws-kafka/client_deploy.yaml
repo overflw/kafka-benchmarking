@@ -1,0 +1,98 @@
+- name: Chrony setup
+  hosts: client
+  connection: ssh
+  become: true
+  tasks:
+    - name: Make sure chronyd & java is installed
+      ansible.builtin.apt:
+        name:
+          - chrony
+          - openjdk-11-jdk
+        update_cache: yes
+    - name: Set up chronyd
+      template:
+        src: "templates/chrony.conf"
+        dest: "/etc/chrony.conf"
+    - name: Start chronyd systemd service
+      systemd:
+        state: restarted
+        daemon_reload: yes
+        name: "chronyd"
+
+- name: Setup Benchmark client
+  hosts: client
+  connection: ssh
+  become: true
+  tasks:
+    - set_fact:
+        bootstrapServers: "{{ groups['kafka_broker'] | map('regex_replace', '^(.*)$', '\\1:9092') | join(',') }}"
+    - name: Check if benchmark code is already installed
+      file: path=/opt/benchmark state=absent
+      tags: [client-code]
+    - name: Copy benchmark code
+      unarchive:
+        src: omb/openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz
+        dest: /opt
+      tags: [client-code]
+    - shell: mv /opt/openmessaging-benchmark-0.0.1-SNAPSHOT /opt/benchmark
+      tags: [client-code]
+    # REHL only
+    #- shell: tuned-adm profile latency-performance
+
+    - name: Get list of driver config files
+      raw: ls -1 /opt/benchmark/driver-kafka/*.yaml
+      register: drivers_list
+      tags: [client-code]
+
+    - name: Configure Bootstrap Servers
+      lineinfile:
+         dest: '{{ item }}'
+         regexp: '^  bootstrap.servers='
+         line: '  bootstrap.servers={{ bootstrapServers }}'
+      with_items: '{{ drivers_list.stdout_lines }}'
+      tags: [client-code]
+
+    - name: Get list of jms driver config files
+      raw: ls -1 /opt/benchmark/driver-jms/kafka*.yaml
+      register: jms_drivers_list
+
+    - name: Configure JMS Bootstrap Servers
+      lineinfile:
+         dest: '{{ item }}'
+         regexp: '^  bootstrap.servers='
+         line: '  bootstrap.servers={{ bootstrapServers }}'
+      with_items: '{{ jms_drivers_list.stdout_lines }}'
+
+    - name: Configure JMS Connection Factory
+      ansible.builtin.replace:
+         dest: '{{ item }}'
+         regexp: 'localhost\:9092'
+         replace: '{{ bootstrapServers }}'
+      with_items: '{{ jms_drivers_list.stdout_lines }}'
+
+    - name: Configure memory
+      lineinfile:
+         dest: /opt/benchmark/bin/benchmark-worker
+         regexp: '^JVM_MEM='
+         line: 'JVM_MEM="-Xms100G -Xmx100G -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -XX:+ParallelRefProcEnabled -XX:+AggressiveOpts -XX:+DoEscapeAnalysis -XX:ParallelGCThreads=12 -XX:ConcGCThreads=12 -XX:+DisableExplicitGC -XX:-ResizePLAB"'
+      tags: [client-code]
+    - name: Configure memory
+      lineinfile:
+         dest: /opt/benchmark/bin/benchmark
+         regexp: '^JVM_MEM='
+         line: 'JVM_MEM="-Xmx4G"'
+      tags: [client-code]
+    - template:
+        src: "templates/workers.yaml"
+        dest: "/opt/benchmark/workers.yaml"
+      tags: [client-code]
+    - name: Install benchmark systemd service
+      template:
+        src: "templates/benchmark-worker.service"
+        dest: "/etc/systemd/system/benchmark-worker.service"
+      tags: [client-code]
+    - systemd:
+        state: restarted
+        daemon_reload: yes
+        name: "benchmark-worker"
+      tags: [client-code]

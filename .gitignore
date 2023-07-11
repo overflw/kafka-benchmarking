@@ -1,0 +1,11 @@
+.vagrant
+*.log
+
+*.idea
+*.jar
+*.terraform
+*.DS_Store
+hosts.yml 
+
+.local
+credentials.json
