@@ -4,7 +4,11 @@ This repo contains terraform configs to setup a kafka cluster for benchmarking o
 
 Currently only aws is fully functional.
 
+You can execute the terraform configs via the corresponding make file.
 
+    make init
+    make apply
+    make destroy
 
 
 ### Tips / Notes
