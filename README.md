@@ -1,8 +1,8 @@
-# kafka-cluster-benchmarking
+# Kafka benchmarking
 
-This repo contains terraform configs to setup a kafka cluster for benchmarking on gcp and aws.
+This repo contains terraform configs to setup a kafka cluster for benchmarking on google cloud platform (gcp) and amazon web services (aws).
 
-Currently only aws is fully functional.
+Currently only aws is fully functional!
 
 You can execute the terraform configs via the corresponding make file.
 
