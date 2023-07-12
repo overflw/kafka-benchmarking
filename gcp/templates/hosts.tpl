@@ -2,11 +2,9 @@ all:
   vars:
     ansible_connection: ssh
     ansible_user: ubuntu
-    #ansible_user: admin
     ansible_become: true
     ansible_ssh_private_key_file: ~/.ssh/tf
     confluent_server_enabled: false
-    kafka_broker_custom_java_args: "-Xmx1000M -Xms1000M"
 
 zookeeper:
   hosts:

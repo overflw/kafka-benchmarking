@@ -9,3 +9,11 @@ hosts.yml
 
 .local
 credentials.json
+
+# Terraform files
+*.tfstate
+*.tfstate.backup
+*.tfplan
+*.terraformrc
+terraform.rc
+.terraform.lock.hcl

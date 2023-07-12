@@ -5,7 +5,6 @@ all:
     ansible_become: true
     ansible_ssh_private_key_file: ~/.ssh/tf
     confluent_server_enabled: false
-    #kafka_broker_custom_java_args: "-Xmx 1536M -Xms 1536M"
 
 zookeeper:
   hosts:
