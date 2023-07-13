@@ -4,6 +4,8 @@ This repo contains terraform configs to setup a kafka cluster for benchmarking o
 
 Be careful with costs caused by using the cloud providers - unfortunately we could not use free-tier vm-instances, as they do not offer enough RAM to run Kafka.
 
+### Setup 
+
 You can execute the terraform configs via the corresponding make commands.
 
 To initialize terraform execute:
@@ -24,12 +26,24 @@ They can be installed with:
 
 and applied on the created vms using our automatically created inventory file `hosts.yml` via:
 
-    ansible-playbook -i hosts.yml confluent.platform.all
+    ansible-playbook -i ../ansible/hosts.yml confluent.platform.all
+
+
+To deploy the benchmark test client from the openmessaging benchmarking tool run:
+
+    ansible-playbook -i ../ansible/hosts.yml client_deploy.yaml
 
 
 To deprovision the deployed instances just run:
 
     make destroy
+
+
+### Benchmarking
+
+ssh into the machine
+
+    ssh -i ~/.ssh/<your-key> ubuntu@<your-client-machine>
 
 
 ### Tips / Notes

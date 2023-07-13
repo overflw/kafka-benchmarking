@@ -67,7 +67,7 @@ resource "google_compute_instance" "kafka_controller" {
 resource "google_compute_instance" "client" {
   count        = "${var.instance_count["client"]}"
   name         = "client-${count.index}"
-  machine_type = "${var.instance_type}"
+  machine_type = "${var.instance_type_client}"
   metadata = {
     ssh-keys = "ubuntu:${file("${var.ssh_key_location}")}"
   }

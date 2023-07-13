@@ -16,7 +16,7 @@ variable "clusters_project" {
 variable "instance_count" {
     type    = map
     default = {
-        broker = 2
+        broker = 1
         controller = 0
         zookeeper = 1
         client = 1
@@ -25,7 +25,12 @@ variable "instance_count" {
 
 variable "instance_type" {
     type    = string
-    default = "n2-standard-2"
+    default = "n2-highmem-2"
+}
+
+variable "instance_type_client" {
+    type    = string
+    default = "n2-highmem-4"
 }
 
 variable "ssh_key_location" {

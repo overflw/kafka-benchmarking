@@ -31,7 +31,7 @@
       tags: [client-code]
     - name: Copy benchmark code
       unarchive:
-        src: omb/openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz
+        src: ../.local/openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz
         dest: /opt
       tags: [client-code]
     - shell: mv /opt/openmessaging-benchmark-0.0.1-SNAPSHOT /opt/benchmark
