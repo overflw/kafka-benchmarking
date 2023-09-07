@@ -2,7 +2,7 @@
 
 This repo contains terraform configs to setup a kafka cluster for benchmarking on google cloud platform (gcp) and amazon web services (aws).
 
-Be careful with costs caused by using the cloud providers - unfortunately we could not use free-tier vm-instances, as they do not offer enough RAM to run Kafka.
+Be careful with costs caused by using the cloud providers - unfortunately we could not use free-tier vm-instances, as they do not offer enough RAM to run our benchmarking setup.
 
 ### Setup 
 

@@ -12,10 +12,10 @@ variable "instance_count" {
     "ksql"            = 0
     "schema"          = 0
     "control_center"  = 0
-    "broker"          = 3
+    "broker"          = 1
     "zookeeper"       = 1
     "controller"      = 0
-    "client"          = 1
+    "client"          = 2
   }
 }
 
@@ -35,6 +35,21 @@ variable "aws_ami" {
 variable "aws_instance_type" {
   description = "The AWS Instance Type."
   default     = "t2.micro"
+}
+
+variable "aws_instance_type_client" {
+  description = "The AWS Instance Type."
+  default     = "m5n.2xlarge" # m5n.2xlarge (8vcpu) org: m5n.8xlarge
+}
+
+variable "aws_instance_type_broker" {
+  description = "The AWS Instance Type."
+  default     = "i3en.2xlarge" # i3en.2xlarge (8vcpu) org: i3en.6xlarge
+}
+
+variable "aws_instance_type_zookeeper" {
+  description = "The AWS Instance Type."
+  default     = "i3en.large" # i3en.xlarge (4vcpu) org: i3en.2xlarge
 }
 
 variable "vpc_cidr" {

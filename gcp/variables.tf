@@ -30,7 +30,7 @@ variable "instance_type" {
 
 variable "instance_type_client" {
     type    = string
-    default = "n2-highmem-4"
+    default = "n2-highmem-4" # 32GB RAM
 }
 
 variable "ssh_key_location" {
