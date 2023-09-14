@@ -1,6 +1,6 @@
 variable "aws_region" {
   description = "The AWS region to create things in."
-  default     = "eu-west-1"
+  default     = "eu-central-1"
 }
 
 variable "instance_count" {
@@ -25,7 +25,7 @@ variable "instance_prefix" {
 
 variable "aws_ami" {
   description = "AWS AMI for Ubuntu Server 18.04 LTS (HVM), SSD Volume Type"
-  default = "ami-0e998c65ac3a4fba1"
+  default = "ami-0242b6a1b2a6d463a"
   #description = "AWS AMI for Debian 10 Buster"
   #default = "ami-0ee256407f6444c24"
   #description = "AWS AMI for Ubuntu Server 20.04 LTS (HVM), SSD Volume Type"
