@@ -1,8 +1,8 @@
 # Kafka benchmarking
 
-This repo contains terraform configs to setup a kafka cluster for benchmarking on google cloud platform (gcp) and amazon web services (aws).
+This repository contains terraform configs to setup a kafka cluster for benchmarking on amazon web services (aws).
 
-Be careful with costs caused by using the cloud providers - unfortunately we could not use free-tier vm-instances, as they do not offer enough RAM to run our benchmarking setup.
+Be careful with costs caused by using the cloud providers - unfortunately we could not use free-tier vm-instances, as they do not offer enough RAM to run the open-messaging benchmarking setup.
 
 ### Setup 
 
@@ -12,12 +12,10 @@ If you are setting up for the first time, follow the [intitial setup steps](#ini
 
 You can execute the terraform configs via the corresponding make commands.
 
-First enter the folder with the terraform files for amazon web services (aws):
+Enter the folder with the terraform files for amazon web services (aws). 
+If you have your aws credentials in place you can plan and apply the terraform config with:
 
     cd aws
-
-If you have your gcp or aws credentials in place you can now plan and apply the terraform config with:
-
     make apply
 
 To deprovision the deployed instances just run:
@@ -65,12 +63,9 @@ The key name referenced by default from our terraform config is "tf-key"
 
 Install [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
-Change to aws directory
+Change to aws directory and initialize terraform:
 
     cd aws
-
-To initialize terraform execute:
-
     make init
 
 
@@ -82,21 +77,24 @@ The kafka deployment playbook from confluent can be installed with:
 
 The open-messaging client archive, required for the `client-deploy.yml` playbook, can be created via the docker file:
 
-    cd ansible/om-benchmark
-    docker run --rm -v ./:/benchmark-target $(docker build -q .)
+    cd ansible/open-messaging
+    docker run --rm -v ./:/benchmark-target $(docker build -q .) "mv /benchmark /benchmark-target"
 
 ### Benchmarking
 
-ssh into the machine
+To run benchmarks, you can use the docker container:
 
-    ssh -i ~/.ssh/<your-key> ubuntu@<your-client-machine>
+    cd ansible/open-messaging
+    docker run --rm -v ./benchmark:/benchmark $(docker build -q .) "bin/benchmark --drivers driver-kafka/kafka-exactly-once.yaml workloads/max-rate-1-topic-1-partition-1p-1c-1kb.yaml"
+
+You can change the workload and driver config in the previous command to modifiy the benchmark. 
 
 
-### Tips / Notes
+### General Notes
 
 Each vm is provisioned with a `ubuntu` user and the given ssh key.
 
-Useful to check the services functionality on the vms is the following systemctl command:
+For debugging it can be useful to check the services functionality on the vms is the following systemctl command:
 
     systemctl status confluent*
 

@@ -18,4 +18,4 @@ credentials.json
 terraform.rc
 .terraform.lock.hcl
 
-ansible/om-benchmark/openmessaging-benchmark-*
+ansible/open-messaging/benchmark

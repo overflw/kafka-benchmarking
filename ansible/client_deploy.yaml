@@ -36,7 +36,7 @@
 
     - name: Copy benchmark code
       unarchive:
-        src: ./om-benchmark/openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz
+        src: ./open-messaging/benchmark/package/target/openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz
         dest: /opt
 
     - shell: mv /opt/openmessaging-benchmark-0.0.1-SNAPSHOT /opt/benchmark
@@ -95,3 +95,38 @@
         state: restarted
         daemon_reload: yes
         name: "benchmark-worker"
+
+- name: Setup Benchmark local config
+  hosts: localhost
+  connection: local
+  tasks:
+  
+  - name: Setup bootstrapServers config
+    ansible.builtin.set_fact:
+      bootstrapServers: "{{ groups['kafka_broker'] | map('regex_replace', '^(.*)$', '\\1:9092') | join(',') }}"
+    tags: [local]
+  
+  - name: Get list of driver config files
+    raw: ls -1 open-messaging/benchmark/driver-kafka/*.yaml
+    register: drivers_list
+    tags: [local]
+
+  - name: Configure Bootstrap Servers
+    lineinfile:
+      dest: '{{ item }}'
+      regexp: '^  bootstrap.servers='
+      line: '  bootstrap.servers={{ bootstrapServers }}'
+    with_items: '{{ drivers_list.stdout_lines }}'
+    tags: [local]
+
+  - name: Configure memory
+    lineinfile:
+      dest: open-messaging/benchmark/bin/benchmark
+      regexp: '^JVM_MEM='
+      line: 'JVM_MEM="-Xmx4G"'
+    tags: [local]
+
+  - template:
+      src: "templates/workers.yaml"
+      dest: "open-messaging/benchmark/workers.yaml"
+    tags: [local]

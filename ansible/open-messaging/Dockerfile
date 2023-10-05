@@ -18,4 +18,4 @@ RUN apt -y install git
 RUN git clone https://github.com/openmessaging/benchmark.git
 WORKDIR /benchmark
 RUN mvn install -Dlicense.skip=true -DskipTests
-ENTRYPOINT [ "/bin/sh", "-c", "mv /benchmark/package/target/openmessaging-benchmark-*-SNAPSHOT-bin.tar.gz /benchmark-target" ]
+ENTRYPOINT [ "/bin/bash", "-c" ]
