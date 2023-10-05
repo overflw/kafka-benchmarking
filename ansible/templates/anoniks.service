@@ -1,0 +1,14 @@
+[Unit]
+Description=Anoniks
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/mvn exec:java -Dexec.mainClass=com.ganges.anoniks.Pipe
+WorkingDirectory=/opt/ganges
+RestartSec=1s
+Restart=on-failure
+Type=simple
+LimitNOFILE=300000
+
+[Install]
+WantedBy=multi-user.target

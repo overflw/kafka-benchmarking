@@ -29,3 +29,9 @@ client:
   %{ for entry in client ~}
   ${ entry }:
   %{ endfor ~}
+
+anoniks:
+  hosts:
+  %{ for entry in anoniks ~}
+  ${ entry }:
+  %{ endfor ~}

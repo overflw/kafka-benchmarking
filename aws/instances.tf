@@ -130,3 +130,17 @@ resource "aws_instance" "zookeeper" {
         Name = "kafka-zookeeper-${var.instance_prefix}-${format("%02d", count.index+1)}"
     }
 }
+
+resource "aws_instance" "anoniks" {
+    count = var.instance_count["anoniks"]
+    ami = var.aws_ami
+    instance_type = var.aws_instance_type_anoniks
+    key_name = var.key_name
+    vpc_security_group_ids = ["${aws_security_group.kafka_sg.id}"] 
+    subnet_id = aws_subnet.default.id
+    associate_public_ip_address = true
+    source_dest_check = false
+    tags = {
+        Name = "kafka-anoniks-${var.instance_prefix}-${format("%02d", count.index+1)}"
+    }
+}

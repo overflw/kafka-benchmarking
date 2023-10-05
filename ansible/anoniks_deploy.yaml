@@ -1,0 +1,43 @@
+
+- name: Java, Maven & Redis setup
+  hosts: anoniks
+  connection: ssh
+  become: true
+  tasks:
+    - name: Make sure java is installed
+      ansible.builtin.apt:
+        name:
+          - openjdk-17-jdk
+        update_cache: yes
+    - name: Install maven
+      ansible.builtin.include_role:
+        name: gantsign.maven
+    - name: Ensure Redis is present
+      ansible.builtin.apt: 
+        name:
+          - redis-server 
+    - name: Ensure Redis is started
+      service: name=redis-server state=started enabled=yes
+
+- name: Anoniks setup
+  hosts: anoniks
+  connection: ssh
+  become: true
+  tasks:
+    - name: Clone of ganges git repository
+      ansible.builtin.git:
+        repo: https://github.com/overflw/ganges.git
+        dest: /opt/ganges
+        version: main
+    - name: Build ganges
+      ansible.builtin.command: mvn clean install -DskipTests
+      args:
+        chdir: /opt/ganges
+    - name: Install anoniks systemd service
+      template:
+        src: "templates/anoniks.service"
+        dest: "/etc/systemd/system/anoniks.service"
+    - systemd:
+        state: restarted
+        daemon_reload: yes
+        name: "anoniks"

@@ -12,10 +12,11 @@ variable "instance_count" {
     "ksql"            = 0
     "schema"          = 0
     "control_center"  = 0
-    "broker"          = 1
+    "broker"          = 3
     "zookeeper"       = 1
     "controller"      = 0
     "client"          = 2
+    "anoniks"         = 1
   }
 }
 
@@ -48,6 +49,11 @@ variable "aws_instance_type_broker" {
 }
 
 variable "aws_instance_type_zookeeper" {
+  description = "The AWS Instance Type."
+  default     = "i3en.large" # i3en.xlarge (4vcpu) org: i3en.2xlarge
+}
+
+variable "aws_instance_type_anoniks" {
   description = "The AWS Instance Type."
   default     = "i3en.large" # i3en.xlarge (4vcpu) org: i3en.2xlarge
 }

@@ -6,6 +6,7 @@ resource "local_file" "hosts" {
       zookeeper = aws_instance.zookeeper[*].public_dns
       controller = aws_instance.controller[*].public_dns
       client = aws_instance.client[*].public_dns
+      anoniks = aws_instance.anoniks[*].public_dns
     }
   )
 }
