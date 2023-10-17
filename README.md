@@ -2,7 +2,7 @@
 
 This repository contains terraform configs to setup a kafka cluster for benchmarking on amazon web services (aws).
 
-Be careful with costs caused by using the cloud providers - unfortunately we could not use free-tier vm-instances, as they do not offer enough RAM to run the open-messaging benchmarking setup.
+Be careful with costs caused by using the cloud providers - unfortunately we could not use free-tier vm-instances, as they do not offer enough resources to run the open-messaging benchmarking setup.
 
 ### Setup 
 
@@ -18,7 +18,7 @@ If you have your aws credentials in place you can plan and apply the terraform c
     cd aws
     make apply
 
-To deprovision the deployed instances just run:
+To deprovision the deployed instances, after benchmarking, just run:
 
     make destroy
 
@@ -32,11 +32,9 @@ To apply the _kafka-confluent playbooks_ on the created vms using our automatica
 
     ansible-playbook -i hosts.yml confluent.platform.all
 
-
-To deploy the _benchmark test client_ from the openmessaging benchmarking tool run:
+To deploy the _benchmark client_ from the openmessaging benchmarking tool run:
 
     ansible-playbook -i hosts.yml client_deploy.yaml
-
 
 To deploy the _anoniks framework_ from the ganges students project run:
 
@@ -61,7 +59,7 @@ The key name referenced by default from our terraform config is "tf-key"
 
 #### Initial setup: terraform
 
-Install [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+Install [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
 
 Change to aws directory and initialize terraform:
 
@@ -87,7 +85,7 @@ To run benchmarks, you can use the docker container:
     cd ansible/open-messaging
     docker run --rm -v ./benchmark:/benchmark $(docker build -q .) "bin/benchmark --drivers driver-kafka/kafka-exactly-once.yaml workloads/max-rate-1-topic-1-partition-1p-1c-1kb.yaml"
 
-You can change the workload and driver config in the previous command to modifiy the benchmark. 
+You can change the workload and driver config in the previous command to modifiy the benchmark. Available drivers and workloads can be found in the `ansible/open-messaging/benchmark` folder, once the docker command from the ansible initial setup section was executed.
 
 
 ### General Notes
