@@ -73,9 +73,3 @@ variable "key_name" {
   default     = "tf-key"
 }
 
-
-
-
-
-
-

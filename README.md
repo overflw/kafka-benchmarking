@@ -6,7 +6,7 @@ Be careful with costs caused by using the cloud providers - unfortunately we cou
 
 ### Setup 
 
-If you are setting up for the first time, follow the [intitial setup steps](#initial-setup-aws).
+If you are setting up for the first time, follow the [intitial setup steps](#initial-setup-aws). The setup depends on python, ansible, ansible-galaxy, docker and terraform.
 
 #### Machine deployment terraform 
 
@@ -69,7 +69,9 @@ Change to aws directory and initialize terraform:
 
 #### Initial setup: ansible
 
-The kafka deployment playbook from confluent can be installed with:
+Install [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) and ansible-galaxy.
+
+The [kafka deployment playbook from confluent](https://docs.confluent.io/ansible/current/overview.html) can be installed via ansible-galaxy:
 
     ansible-galaxy collection install confluent.platform
 
