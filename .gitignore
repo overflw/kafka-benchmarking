@@ -18,4 +18,4 @@ credentials.json
 terraform.rc
 .terraform.lock.hcl
 
-ansible/open-messaging/benchmark
+ansible/open-messaging/target

@@ -69,7 +69,7 @@ Change to aws directory and initialize terraform:
 
 #### Initial setup: ansible
 
-Install [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) and ansible-galaxy.
+Install [ansible](https://docs.ansible.com/ansible/latest/installation_guide/index.html) and ansible-galaxy.
 
 The [kafka deployment playbook from confluent](https://docs.confluent.io/ansible/current/overview.html) can be installed via ansible-galaxy:
 
@@ -78,25 +78,26 @@ The [kafka deployment playbook from confluent](https://docs.confluent.io/ansible
 The open-messaging client archive, required for the `client-deploy.yml` playbook, can be created via the docker file:
 
     cd ansible/open-messaging
-    docker run --rm -v ./:/benchmark-target $(docker build -q .) "mv /benchmark /benchmark-target"
+    docker build -t om-benchmark .
+    docker run --rm -v ./target/:/target om-benchmark 'mv /benchmark/package/target/* /target'
 
 ### Benchmarking
 
-To run benchmarks, you can use the docker container:
+To run benchmarks, you can use the previously build docker container:
 
     cd ansible/open-messaging
-    docker run --rm -v ./benchmark:/benchmark $(docker build -q .) "bin/benchmark --drivers driver-kafka/kafka-exactly-once.yaml workloads/max-rate-1-topic-1-partition-1p-1c-1kb.yaml"
+    docker run --rm om-benchmark "bin/benchmark \
+        --drivers driver-kafka/kafka-exactly-once.yaml \
+        workloads/max-rate-1-topic-1-partition-1p-1c-1kb.yaml"
 
 You can change the workload and driver config in the previous command to modifiy the benchmark. Available drivers and workloads can be found in the `ansible/open-messaging/benchmark` folder, once the docker command from the ansible initial setup section was executed.
 
 
 ### General Notes
 
-Each vm is provisioned with a `ubuntu` user and the given ssh key.
+Each VM is provisioned with a `ubuntu` user and the given ssh key.
 
 For debugging it can be useful to check the services functionality on the vms is the following systemctl command:
 
     systemctl status confluent*
-
-
 

@@ -13,7 +13,7 @@
 #
 
 # Build the Project
-FROM maven:3.8.6 as build
+FROM maven:3.8.6
 RUN apt -y install git
 RUN git clone https://github.com/openmessaging/benchmark.git
 WORKDIR /benchmark

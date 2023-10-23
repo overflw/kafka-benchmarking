@@ -36,7 +36,7 @@
 
     - name: Copy benchmark code
       unarchive:
-        src: ./open-messaging/benchmark/package/target/openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz
+        src: ./open-messaging/target/openmessaging-benchmark-0.0.1-SNAPSHOT-bin.tar.gz
         dest: /opt
 
     - shell: mv /opt/openmessaging-benchmark-0.0.1-SNAPSHOT /opt/benchmark
